@@ -1,0 +1,41 @@
+{
+  "manifest_version": 3,
+  "name": "AI Context Assistant",
+  "description": "Explain, rewrite, summarize, and transform selected text with a fast AI popup.",
+  "version": "0.1.0",
+  "action": {
+    "default_title": "AI Context Assistant",
+    "default_popup": "popup.html"
+  },
+  "options_page": "settings.html",
+  "background": {
+    "service_worker": "assets/background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["assets/content.iife.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "permissions": ["activeTab", "contextMenus", "storage", "scripting", "sidePanel"],
+  "host_permissions": ["https://api.openai.com/*", "https://generativelanguage.googleapis.com/*", "https://api.anthropic.com/*", "http://localhost/*", "http://127.0.0.1/*"],
+  "commands": {
+    "open-ai-assistant": {
+      "suggested_key": {
+        "default": "Alt+O"
+      },
+      "description": "Open AI Context Assistant for selected text"
+    }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["assets/*"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' https://api.openai.com https://generativelanguage.googleapis.com https://api.anthropic.com http://localhost:* http://127.0.0.1:*"
+  }
+}
